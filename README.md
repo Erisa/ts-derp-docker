@@ -4,7 +4,7 @@ This is [yet](https://github.com/tijjjy/Tailscale-DERP-Docker) [another](https:/
 
 The guiding principles that distinguish this from alternatives are:
 
-- Compatability with all [containerboot](https://pkg.go.dev/tailscale.com/cmd/containerboot) environment variables.
+- Compatibility with all [containerboot](https://pkg.go.dev/tailscale.com/cmd/containerboot) environment variables.
 - Stable and predictable versioning, using the same version of Tailscale and DERP together to ensure stability. 
 - Will not run Tailscale if not desired.
 - Full functioning of `/debug/` routes.
