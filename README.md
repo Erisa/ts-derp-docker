@@ -30,7 +30,7 @@ The following ports are required by default:
 ```
 80/tcp (HTTP)
 443/tcp (HTTPS)
-3478/udp (HTTPS)
+3478/udp (STUN)
 ```
 
 Port 80 [normally cannot be changed](https://tailscale.com/kb/1118/custom-derp-servers#required-ports), but you are welcome to try and see.
