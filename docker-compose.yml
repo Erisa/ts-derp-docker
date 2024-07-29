@@ -21,5 +21,4 @@ services:
          - /dev/net/tun:/dev/net/tun
 
 volumes:
-  derper-state:
   tailscale-state: 
