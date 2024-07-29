@@ -1,0 +1,25 @@
+services:
+   derper:
+       image: ghcr.io/erisa/ts-derper:latest
+       hostname: ${TS_DERP_HOSTNAME}
+       volumes:
+         - /lib/modules:/lib/modules:ro
+         - ./certs:/root/derper/${TS_DERP_HOSTNAME}
+         - tailscale-state:/var/lib/tailscale
+       cap_add:
+         - NET_ADMIN
+         - NET_RAW
+       env_file: .env
+       ports:
+         - "${TS_DERP_HTTP_PORT}:${TS_DERP_HTTP_PORT}/tcp"
+         - "${TS_DERP_LISTEN_PORT}:${TS_DERP_LISTEN_PORT}/tcp"
+         - "${TS_DERP_STUN_PORT}:${TS_DERP_STUN_PORT}/udp"
+         #Only use if you aren't running tailscale on the host
+         #- 41641:41641/udp
+       restart: unless-stopped
+       devices:
+         - /dev/net/tun:/dev/net/tun
+
+volumes:
+  derper-state:
+  tailscale-state: 
