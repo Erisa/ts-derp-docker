@@ -21,4 +21,4 @@ services:
          - /dev/net/tun:/dev/net/tun
 
 volumes:
-  tailscale-state: 
+  tailscale-state:
