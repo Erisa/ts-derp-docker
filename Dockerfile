@@ -10,7 +10,7 @@ LABEL org.opencontainers.image.source=https://github.com/Erisa/ts-derp-docker
 ARG TAILSCALE_VERSION=v1.92.2
 
 ### Build dependancies
-RUN apk add git bash curl --no-cache
+RUN apk add --no-cache git bash curl --no-cache
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -28,7 +28,7 @@ RUN mkdir binout && GOOS=${TARGETOS} GOARCH=${TARGETARCH} ./tool/go build -o ./b
 FROM alpine:${ALPINE_VERSION}
 
 ### Runtime dependancies
-RUN apk add curl iptables iproute2
+RUN apk add --no-cache curl iptables iproute2
 
 COPY --from=builder /build/binout/* /usr/local/bin/
 
