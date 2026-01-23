@@ -1,4 +1,4 @@
-name: docker-build
+name: docker-build-minimal
 
 on:
   push:
@@ -39,11 +39,11 @@ jobs:
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # pin@v6.18.0
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.minimal
           platforms: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/s390x,linux/ppc64le,linux/riscv64
           push: true
           tags: |
-            ghcr.io/${{ github.actor }}/ts-derper:latest
-            ghcr.io/${{ github.actor }}/ts-derper:${{ steps.previoustag.outputs.tag }}
+            ghcr.io/${{ github.actor }}/ts-derper:latest-minimal
+            ghcr.io/${{ github.actor }}/ts-derper:${{ steps.previoustag.outputs.tag }}-minimal
           cache-from: type=gha,mode=max
           cache-to: type=gha,mode=max
