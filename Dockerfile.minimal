@@ -1,0 +1,44 @@
+# Global arguments
+ARG ALPINE_VERSION=3.23
+
+## Build container
+FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS builder
+
+### Build argument(s)
+ARG TARGETOS TARGETARCH
+ARG TAILSCALE_VERSION=v1.92.2
+ARG FEATURETAGS="acme,cli,clientmetrics,dns,hujsonconf,netstack,osrouter,tailnetlock,unixsocketidentity"
+
+WORKDIR /build
+
+### Install dependancies and clone the right version of Tailscale
+RUN apk add --no-cache git bash curl --no-cache && \
+    git clone https://github.com/tailscale/tailscale --depth=1 --branch ${TAILSCALE_VERSION} . && \
+    mkdir binout
+
+### Define build tags from featuretags and build all the needed binaries
+RUN export TAGS=$(GOOS=${TARGETOS} GOARCH=${TARGETARCH} ./tool/go run \
+        cmd/featuretags/featuretags.go -min -add $FEATURETAGS) && \
+        
+    GOOS=${TARGETOS} GOARCH=${TARGETARCH} ./tool/go build \
+        -o ./binout -trimpath -ldflags "-w -s" -tags $TAGS \
+        . ./cmd/tailscaled ./cmd/derper ./cmd/containerboot 
+
+## Runtime container
+FROM alpine:${ALPINE_VERSION}
+
+COPY --from=builder /build/binout/* /usr/local/bin/
+COPY --chmod=755 init.sh /init.sh
+
+### Add runtime dependancies and symlink tailscaled --> tailscale
+RUN apk add --no-cache curl iptables iproute2 && \
+    cd /usr/local/bin && ln -s tailscaled tailscale
+
+### Unless changed
+EXPOSE 80/tcp
+EXPOSE 443/tcp
+EXPOSE 3478/udp
+
+ENTRYPOINT ["/init.sh"]
+
+LABEL org.opencontainers.image.source=https://github.com/Erisa/ts-derp-docker
