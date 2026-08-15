@@ -1,5 +1,5 @@
 # Global arguments
-ARG ALPINE_VERSION=3.23
+ARG ALPINE_VERSION=3.24
 
 ## Build container
 
@@ -7,7 +7,7 @@ FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS builder
 LABEL org.opencontainers.image.source=https://github.com/Erisa/ts-derp-docker
 
 ### Build argument(s)
-ARG TAILSCALE_VERSION=v1.98.9
+ARG TAILSCALE_VERSION=v1.102.2
 
 ### Build dependancies
 RUN apk add --no-cache git bash curl --no-cache
